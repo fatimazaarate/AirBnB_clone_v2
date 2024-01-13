@@ -130,7 +130,7 @@ class HBNBCommand(cmd.Cmd):
         for para in class_para[1:]:
             key, value = para.split('=')
             """checks if value is enclosed in double quotes"""
-            if value[0] == '"' and value[-1] == '"':
+            if value[0] == '"' == value[-1]:
                 value = value[1:-1].replace('\\"', '"')
             else:
                 if '.' in value:
