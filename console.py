@@ -139,12 +139,14 @@ class HBNBCommand(cmd.Cmd):
                     continue
             """ updating dict"""    
             new_dict[key] = value
-
-        """ creates instance with provided attributes"""
-        new_instance = HBNBCommand.classes[class_para[0]](**new_dict)
-        storage.new(new_instance)
-        print(new_instance.id)
-        storage.save()
+        if new_dict == {}:
+            new_instance = HBNBCommand.classes[class_para[0]]()
+        else:
+            """ creates instance with provided attributes"""
+            new_instance = HBNBCommand.classes[class_para[0]](**new_dict)
+            storage.new(new_instance)
+            print(new_instance.id)
+            storage.save()
 
     def help_create(self):
         """ Help information for the create method """
