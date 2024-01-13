@@ -130,8 +130,16 @@ class HBNBCommand(cmd.Cmd):
             key, value = para.split('=')
             """ replace _ with spaces"""
             key = key.replace('_', ' ')
-            """handling different value types"""
-
+            """checks if value is enclosed in double quotes"""
+            if value[0] == '"' and value[-1] == '"':
+                value = value[1:-1].replace('\\"', '"')
+            elif '.' in value:
+                value = float(value)
+            else:
+                """converts value to int"""
+                value = int(value)
+            """ updating dict"""    
+            new_dict[key] = value    
 
         """ creates instance with provided attributes"""
         new_instance = HBNBCommand.classes[class_name](**new_dict)
