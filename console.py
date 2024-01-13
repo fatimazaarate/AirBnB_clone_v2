@@ -118,15 +118,16 @@ class HBNBCommand(cmd.Cmd):
         if not args:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
+        """ splits args into class name  and para"""
+        class_para = args.split(" ")
+
+        if class_para[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        """ splits args into class name  and para"""
-        class_name, *param = args.split()
         """ new dict to store attri values """
         new_dict = {}
         """ split param into key, value"""
-        for para in param:
+        for para in class_para[1:]:
             key, value = para.split('=')
             """ replace _ with spaces"""
             key = key.replace('_', ' ')
@@ -142,8 +143,8 @@ class HBNBCommand(cmd.Cmd):
             new_dict[key] = value    
 
         """ creates instance with provided attributes"""
-        new_instance = HBNBCommand.classes[class_name](**new_dict)
-        storage.save()
+        new_instance = HBNBCommand.classes[class_para[0]](**new_dict)
+        storage.new(new_instance)
         print(new_instance.id)
         storage.save()
 
