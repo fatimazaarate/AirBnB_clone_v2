@@ -129,8 +129,6 @@ class HBNBCommand(cmd.Cmd):
         """ split param into key, value"""
         for para in class_para[1:]:
             key, value = para.split('=')
-            """ replace _ with spaces"""
-            key = key.replace('_', ' ')
             """checks if value is enclosed in double quotes"""
             if value[0] == '"' and value[-1] == '"':
                 value = value[1:-1].replace('\\"', '"')
