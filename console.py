@@ -131,12 +131,16 @@ class HBNBCommand(cmd.Cmd):
             key, value = para.split('=')
             """checks if value is enclosed in double quotes"""
             if value[0] == '"' and value[-1] == '"':
-                value = value[1:-1].replace("_", " ")
+                value = value[1:-1].replace('\\"', '"')
             else:
-                try:
-                    value = eval(value)
-                except Exception:
-                    continue
+                if '.' in value:
+                    value = float(value)
+                else:
+                    value = int(value)
+
+            if key == 'name':
+                value = value.replace('_', ' ')
+
             """ updating dict"""    
             new_dict[key] = value
 
