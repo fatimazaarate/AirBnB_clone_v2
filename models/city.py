@@ -1,12 +1,8 @@
 #!/usr/bin/python3
 """ City Module for HBNB project """
-from models.base_model import BaseModel
-from sqlalchemy.ext.declarative import declarative_base
+from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
-
-
-Base = declarative_base()
 
 
 class City(BaseModel, Base):
@@ -14,5 +10,5 @@ class City(BaseModel, Base):
     __tablename__ = "cities"
 
     name = Column(String(128), nullable=False)
-    state_id = Column(String(60), ForeignKey('states_id'), nullable=False)
-    places = relationship('Place', backref='cities', cascade="delete")
+    state_id = Column(String(60), ForeignKey('states.id'), nullable=False)
+    states = relationship('State', backref='cities', cascade="all, delete", viewonly=False, overlaps="cities,states")
