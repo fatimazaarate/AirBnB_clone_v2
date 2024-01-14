@@ -114,41 +114,37 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, args):
-        """to split the Base name from given Parameters"""
-        new = args.partition(" ")
-
         """ Create an object of any class"""
-        """ Create an object of any class"""
-        if not new[0]:
+        if not args:
             print("** class name missing **")
             return
-        elif new[0] not in HBNBCommand.classes:
+        """ splits args into class name  and para"""
+        class_para = args.split(" ")
+
+        if class_para[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        """split between parameters"""
-        parameters = new[2].split(" ")
-        """to split key value in given parameters"""
-        new_list = []
-        for para in parameters:
-            keyvalue = para.split("=")
-            new_list.append(keyvalue)
+        """ new dict to store attri values """
         new_dict = {}
+        """ split param into key, value"""
+        for para in class_para[1:]:
+            key, value = para.split('=')
+            """checks if value is enclosed in double quotes"""
+            if value[0] == '"' and value[-1] == '"':
+                value = value[1:-1].replace("_", " ")
+            else:
+                try:
+                    value = eval(value)
+                except Exception:
+                    continue
+            if key == 'name':
+                value = value.replace('_', ' ')
 
-        if new_list != [['']]:
-            for key, value in new_list:
-                if value[0] == '"' == value[-1]:
-                    value = value[1:-1].replace("_", " ")
-                else:
-                    try:
-                        value = eval(value)
-                    except Exception:
-                        continue
-                new_dict[key] = value
+            """ updating dict"""    
+            new_dict[key] = value
 
-        if new_dict == {}:
-            new_instance = HBNBCommand.classes[new[0]]()
-        else:
-            new_instance = HBNBCommand.classes[new[0]](**new_dict)
+        """ creates instance with provided attributes"""
+        new_instance = HBNBCommand.classes[class_para[0]](**new_dict)
         storage.new(new_instance)
         print(new_instance.id)
         storage.save()
