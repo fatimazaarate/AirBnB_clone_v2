@@ -35,19 +35,21 @@ class Place(BaseModel, Base):
         @property
         def amenities(self):
             """
-            get the list of Amenities linked to place
+            Getter attribute amenities that returns the list of 
+            Amenity instances based on the attribute amenity_ids that 
+            contains all Amenity.id linked to the Place
             """
-            my_amenities = []
-            all_instan_amenities = list(models.storage.all(Amenity).values())
-            for amenity in all_instan_amenities:
+            all_amenities = []
+            amenities_instances = list(models.storage.all(Amenity).values())
+            for amenity in amenities_instances:
                 if amenity.id in self.amenity_ids:
-                    my_amenities.append(amenity)
-            return my_amenities
+                    all_amenities.append(amenity)
+            return all_amenities
 
         @amenities.setter
         def amenities(self, value):
-            """set amenities that handles append method for adding
-            an Amenity.id to the attribute amenity_ids
+            """Setter attribute amenities that handles append method
+            for adding an Amenity.id to the attribute amenity_ids.
             """
             if isinstance(value, "Amenity"):
                 self.amenity_ids.append(value.id)
