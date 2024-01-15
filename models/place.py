@@ -7,6 +7,12 @@ from models.review import Review
 from models.amenity import Amenity
 from sqlalchemy.orm import relationship
 
+place_amenity = Table("place_amenity", Base.metadata,
+        Column("place_id", String(60), ForeignKey("places.id"),
+            primary_key=True, nullable=False),
+        Column("amenity_id", String(60), ForeignKey("amenities.id"),
+            primary_key=True, nullable=False))
+
 class Place(BaseModel, Base):
     """ A place to stay """
     __tablename__ = "places"
@@ -21,4 +27,5 @@ class Place(BaseModel, Base):
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
     amenity_ids = []
-    reviews= relationship("Review", backref="place", cascade="delete")
+    reviews = relationship("Review", backref="place", cascade="delete")
+    amenities = relationship("Amenity", secondary="place_amenity", viewonly=False)
