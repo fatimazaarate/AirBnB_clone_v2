@@ -12,7 +12,7 @@ class State(BaseModel, Base):
     """ State class """
     __tablename__ = "states"
     name = Column(String(128), nullable=False)
-    city1 = relationship('City', backref='state', cascade="all, delete", viewonly=False, overlaps="cities,states")
+    cities = relationship('City', cascade="delete", backref="state")
 
     if getenv("HBNB_TYPE_STORAGE") != "db":
         @property
