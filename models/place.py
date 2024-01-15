@@ -1,14 +1,9 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
 from models.base_model import BaseModel, Base
-<<<<<<< HEAD
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, Table
 from os import getenv
 from sqlalchemy.orm import relationship
-=======
-from sqlalchemy import Column, Integer, String, Float
-from sqlalchemy import ForeignKey, Table
->>>>>>> 7ed89a156bb59c766ed000f73ecf2381b1eeb71c
 
 class Place(BaseModel, Base):
     """ A place to stay """
