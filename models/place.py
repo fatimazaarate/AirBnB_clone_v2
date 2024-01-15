@@ -5,7 +5,7 @@ from sqlalchemy import Column, Integer, String, Float, ForeignKey, Table
 from os import getenv
 from models.review import Review
 from models.amenity import Amenity
-from models import storage
+import models
 from sqlalchemy.orm import relationship
 
 place_amenity = Table("place_amenity", Base.metadata,
@@ -29,7 +29,7 @@ class Place(BaseModel, Base):
     longitude = Column(Float, nullable=True)
     amenity_ids = []
     reviews = relationship("Review", backref="place", cascade="delete")
-
+    amenities = relationship("Amenity", secondary="place_amenity", viewonly=False)
 
     if getenv("HBNB_TYPE_STORAGE") != "db":
         @property
@@ -38,7 +38,7 @@ class Place(BaseModel, Base):
             get the list of Amenities linked to place
             """
             my_amenities = []
-            all_instan_amenities = list(storage.all(Amenity).values())
+            all_instan_amenities = list(models.storage.all(Amenity).values())
             for amenity in all_instan_amenities:
                 if amenity.id in self.amenity_ids:
                     my_amenities.append(amenity)
