@@ -13,9 +13,5 @@ class User(BaseModel, Base):
     password = Column(String(128), nullable=False)
     first_name = Column(String(128))
     last_name = Column(String(128))
-<<<<<<< HEAD
     places= relationship("Place", backref="user", cascade="delete")
     reviews= relationship("Review", backref="user", cascade="delete")
-=======
-    places = relationship("Place", backref="user", cascade="delete")
->>>>>>> 7ed89a156bb59c766ed000f73ecf2381b1eeb71c
