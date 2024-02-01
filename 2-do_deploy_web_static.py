@@ -1,39 +1,54 @@
 #!/usr/bin/python3
-from fabric.api import *
+"""
+a Fabric script that distributes an archive to my web servers
+"""
+from fabric.api import env, run, put
 from os.path import exists
 
-"""a Fabric script (based on the file 1-pack_web_static.py)
-that distributes an archive to your web servers"""
-
-
-env.hosts = ['107.23.102.54', '54.160.89.181']
+env.hosts = ['34.224.3.13', '3.83.18.210']
 
 
 def do_deploy(archive_path):
-    """Distributes an archive to the web servers"""
-    # Check if the archive path exists
-    if not exists(archive_path):
+    """deploys the archive to my servers"""
+
+    # Check if the specified archive_path exists
+    if exists(archive_path) is False:
         return False
-    # Get the archive filename without extension
-    archive_file = archive_path.split('/')[-1]
-    archive_name = archive_file.split('.')[0]
-    # Define the remote paths
-    tmp_path = "/tmp/{}".format(archive_file)
-    release_path = "/data/web_static/releases/{}".format(archive_name)
-    current_path = "/data/web_static/current"
-    # Upload the archive to the /tmp/ directory of the web server
-    put(archive_path, tmp_path)
-    # Uncompress the archive to the /data/web_static/releases/
-    run("mkdir -p {}".format(release_path))
-    run("tar -xzf {} -C {}".format(tmp_path, release_path))
-    # Delete the archive from the web server
-    run("rm {}".format(tmp_path))
-    # Delete the symbolic link /data/web_static/current from the web server
-    run("mv {}/web_static/* {}".format(release_path, release_path))
-    # Delete the link /data/web_static/current from the web server
-    run("rm -rf {}/web_static".format(release_path))
-    # Delete the link /data/web_static/current from the web server
-    run("rm -rf {}".format(current_path))
-    # Create a new the symbolic link /data/web_static/current on the web server
-    run("ln -s {} {}".format(release_path, current_path))
+
+    # Extract filename and filename without extension
+    file_name = archive_path.split('/')[-1]
+    filename_without_ext = file_name.split('.')[0]
+
+    # Upload the archive to the /tmp/ directory on the server
+    put(archive_path, "/tmp/")
+
+    # Create a directory for the new release
+    run("mkdir -p /data/web_static/releases/{}/"
+        .format(filename_without_ext))
+
+    # Extract the archive to the new release directory
+    run("tar -xzf /tmp/{} -C /data/web_static/releases/{}/"
+        .format(file_name, filename_without_ext))
+
+    # Remove the uploaded archive from /tmp/
+    run("rm /tmp/{}".format(file_name))
+
+    # Move the contents of web_static subdirectory to release directory
+    run("mv /data/web_static/releases/{}/web_static/* "
+        "/data/web_static/releases/{}/"
+        .format(filename_without_ext, filename_without_ext))
+
+    # Remove the now-empty web_static subdirectory
+    run("rm -rf /data/web_static/releases/{}/web_static"
+        .format(filename_without_ext))
+
+    # Remove the symbolic link to the current release
+    run("rm -rf /data/web_static/current")
+
+    # Create a new symbolic link to the latest release
+    run("ln -s /data/web_static/releases/{}/ /data/web_static/current"
+        .format(filename_without_ext))
+
+    # Deployment successful
+    print("New version deployed!")
     return True
