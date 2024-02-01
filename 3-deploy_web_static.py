@@ -31,7 +31,7 @@ def do_deploy(archive_path):
         return False
 
     # Extract filename and filename without extension
-    file_name = archive_path.split("/")[-1]
+    file_name = archive_path.split('/')[-1]
     filename_without_ext = file_name.split('.')[0]
 
     try:
