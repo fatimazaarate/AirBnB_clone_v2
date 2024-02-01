@@ -27,6 +27,7 @@ def do_deploy(archive_path):
 
     # Check if the specified archive_path exists
     if exists(archive_path) is False:
+        print("Archive does not exist:", archive_path)
         return False
 
     # Extract filename and filename without extension
@@ -35,13 +36,18 @@ def do_deploy(archive_path):
 
     try:
         # Upload the archive to the /tmp/ directory on the server
-        put(archive_path, "/tmp/")
+        print("Uploading archive...")
+        put_result = put(archive_path, "/tmp/")
+        if put_result.failed:
+            print("Failed to upload archive")
+            return False
 
         # Create a directory for the new release
         run("mkdir -p /data/web_static/releases/{}/"
             .format(filename_without_ext))
 
         # Extract the archive to the new release directory
+        print("Extracting archive...")
         run("tar -xzf /tmp/{} -C /data/web_static/releases/{}/"
             .format(file_name, filename_without_ext))
 
@@ -65,8 +71,10 @@ def do_deploy(archive_path):
             .format(filename_without_ext))
 
         # Deployment successful
+        print("Deployment successful")
         return True
 
-    except Exception:
+    except Exception as e:
         # If an exception occurs during the deployment, return False
+        print("Error during deployment:", e)
         return False
