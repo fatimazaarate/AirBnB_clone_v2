@@ -16,5 +16,16 @@ def hello_HBNB():
     return "Hello HBNB!"
 
 
+@app.route("/hbnb", strict_slashes=False)
+def HBNB():
+    """
+    Display a greeting message.
+
+    Returns:
+        str: A string containing the greeting message.
+    """
+    return "HBNB"
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
