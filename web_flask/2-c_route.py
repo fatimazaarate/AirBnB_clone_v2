@@ -21,5 +21,15 @@ def HBNB():
     return "HBNB"
 
 
+@app.route("/c/<text>", strict_slashes=False)
+def display_C(text):
+    """
+    Display “C ” followed by the value of the text variable.
+    Args:
+        text (str): The text provided in the URL parameter.
+    """
+    return "C {}".format(text.replace("_", " "))
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
