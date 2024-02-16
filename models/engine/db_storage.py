@@ -15,7 +15,6 @@ from models.amenity import Amenity
 class DBStorage:
     __engine = None
     __session = None
-    
 
     def __init__(self):
         self.__engine = create_engine(
@@ -29,7 +28,7 @@ class DBStorage:
         # drop all tables if the environment variable HBNB_ENV is equal to test
         if getenv("HBNB_ENV") == 'test':
             Base.metadata.drop_all(self.__engine)
-        
+
         # Create tables if they don't exist
         Base.metadata.create_all(self.__engine)
 
@@ -48,27 +47,27 @@ class DBStorage:
             if isinstance(cls, str):
                 cls = eval(cls)
             objects = self.__session.query(cls).all()
-        
+
         dictionary = {}
         for obj in objects:
             dictionary["{}.{}".format(obj.__class__.__name__, obj.id)] = obj
         return dictionary
-    
+
     def new(self, obj):
         """add the object to the current database
         session (self.__session)"""
         self.__session.add(obj)
-    
+
     def save(self):
         """commit all changes of the current database
         session (self.__session)"""
         self.__session.commit()
-    
+
     def delete(self, obj=None):
         """ delete from the current database session obj if not None"""
         if obj is not None:
             self.__session.delete(obj)
-    
+
     def reload(self):
         """create all tables in the database
         create the current database session"""
