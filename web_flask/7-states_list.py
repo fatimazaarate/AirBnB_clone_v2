@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 
 @app.teardown_appcontext
-def teardown():
+def teardown(exception):
     """After each request you must remove the current SQLAlchemy Session"""
     storage.close()
 
@@ -16,7 +16,7 @@ def teardown():
 @app.route("/states_list", strict_slashes=False)
 def display_states():
     """display a HTML page: (inside the tag BODY)"""
-    states = storage.all(state)
+    states = storage.all(State)
     return render_template('7-states_list.html', states=states)
 
 
