@@ -47,8 +47,9 @@ def display_n(n):
     """
     Display “n is a number” only if n is an integer.
     """
-    if isinstance(n, int):
-        return "n is a number"
+    if n.isdigit():
+        return "{} is a number".format(n)
+    return
 
 
 if __name__ == '__main__':
