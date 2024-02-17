@@ -8,7 +8,7 @@
         <UL>
             {% for state_id, state in states.items()|sort(attribute="name") %}
                 <LI>
-                    {{ state_id }}: <B>{{ state.name }}</B>
+                    {{ state.id }}: <B>{{ state.name }}</B>
                     <UL>
                         {% for city in state.cities|sort(attribute="name") %}
                             <LI>
